@@ -218,6 +218,8 @@ const appRoutes: Routes = [
   { path: 'dashboard', loadChildren: './modules/estadisticas/estadistica.module#EstadisticaModule', canActivate: [RoutingNavBar, RoutingGuard] },
   // Campañas Salud
   { path: 'campaniasSalud', component: CampaniaSaludComponent, canActivate: [RoutingNavBar, RoutingGuard] },
+  // Turnero
+  { path: 'turnero', loadChildren: './modules/turnero/turnero.module#TurneroModule', canActivate: [RoutingNavBar, RoutingGuard] },
 
   // dejar siempre al último porque no encuentra las url después de esta
   { path: '**', redirectTo: 'inicio' }

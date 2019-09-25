@@ -77,6 +77,7 @@ import { PrestamosService } from './services/prestamosHC/prestamos-hc.service';
 import { RenaperService } from './services/fuentesAutenticas/servicioRenaper.service';
 import { ConfiguracionPrestacionService } from './services/term/configuracionPrestacion.service';
 import { PrestacionLegacyService } from './services/prestacionLegacy.service';
+import { WebSocketService } from './services/websocket.service';
 
 // ... Turnos
 import { EspacioFisicoService } from './services/turnos/espacio-fisico.service';
@@ -407,6 +408,7 @@ import { CampaniaSaludService } from './apps/campaniaSalud/services/campaniaSalu
 import { CampaniaSaludComponent } from './apps/campaniaSalud/components/campaniaSalud.component';
 import { CampaniaVisualizacionComponent } from './apps/campaniaSalud/components/campaniaVisualizacion.component';
 import { CampaniaFormComponent } from './apps/campaniaSalud/components/campania-create-update.component';
+import { TurneroModule } from './modules/turnero/turnero.module';
 
 let RUPComponentsArray = [
     SelectPorRefsetComponent,
@@ -533,6 +535,7 @@ registerLocaleData(localeEs, 'es');
         AgmCoreModule.forRoot({
             apiKey: environment.MAPS_KEY
         }),
+        TurneroModule.forRoot(),
     ],
     declarations: [
         AppComponent, InicioComponent, LoginComponent, SelectOrganizacionComponent,
@@ -750,7 +753,8 @@ registerLocaleData(localeEs, 'es');
         SnomedBuscarService,
         HUDSService,
         TurnosPrestacionesService,
-        PlantillasService
+        PlantillasService,
+        WebSocketService
     ]
 })
 

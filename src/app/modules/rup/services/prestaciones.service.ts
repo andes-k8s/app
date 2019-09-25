@@ -904,6 +904,13 @@ export class PrestacionesService {
     }
 
     /**
+     * Estadisticas de RUP
+     */
+    public estadisticas(params) {
+        return this.server.get('/modules/rup/estadisticas', { params });
+    }
+
+    /**
      * Método get. Trae lista de objetos prestacion.
      *
      * @param {*} idOrganizacion Opciones de búsqueda

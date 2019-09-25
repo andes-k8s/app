@@ -53,6 +53,8 @@
     "ng2-slugify": "^0.1.0",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.3.3",
+    "socket.io-client": "^2.3.0",
+    "socketio-wildcard": "^2.0.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
