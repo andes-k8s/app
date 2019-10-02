@@ -408,7 +408,7 @@ import { CampaniaSaludService } from './apps/campaniaSalud/services/campaniaSalu
 import { CampaniaSaludComponent } from './apps/campaniaSalud/components/campaniaSalud.component';
 import { CampaniaVisualizacionComponent } from './apps/campaniaSalud/components/campaniaVisualizacion.component';
 import { CampaniaFormComponent } from './apps/campaniaSalud/components/campania-create-update.component';
-import { TurneroModule } from './modules/turnero/turnero.module';
+import { TurneroProvidersModule } from './modules/turnero/turnero.providers';
 
 let RUPComponentsArray = [
     SelectPorRefsetComponent,
@@ -529,13 +529,13 @@ registerLocaleData(localeEs, 'es');
         PlexModule,
         AuthModule,
         ScrollingModule,
+        TurneroProvidersModule,
         NgDragDropModule.forRoot(),
         ChartsModule,
         routing,
         AgmCoreModule.forRoot({
             apiKey: environment.MAPS_KEY
-        }),
-        TurneroModule.forRoot(),
+        })
     ],
     declarations: [
         AppComponent, InicioComponent, LoginComponent, SelectOrganizacionComponent,
