@@ -494,7 +494,7 @@ export class PuntoInicioComponent implements OnInit {
     cargarTurnos(agenda) {
         this.cancelarDinamica();
         this.agendaSeleccionada = agenda ? agenda : 'fueraAgenda';
-        if (agenda) {
+        if (agenda && agenda.espacioFisico) {
             let i = this.espaciosFisicosTurnero.findIndex((e) => e === agenda.espacioFisico.id);
             if (i >= 0) {
                 this.mostrarBtnTurnero = true;
