@@ -123,10 +123,11 @@ $andes-naranja-claro: #f4a03b;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 2rem;
+    margin: 2rem auto 2rem auto;
+    width: 40%;
 
     [svgLogo] {
-        height: 7.5rem;
+        width: 9rem;
     }
 
     div.bloque-texto {
@@ -136,7 +137,7 @@ $andes-naranja-claro: #f4a03b;
 
         .suffix-provincia {
             letter-spacing: 0.9rem;
-            font-size: 2.5vw;
+            font-size: 1.15rem;
             font-weight: 400;
             text-align: right;
             text-transform: uppercase;
@@ -145,4 +146,12 @@ $andes-naranja-claro: #f4a03b;
         }
 
     }
+
+
+    @media only screen and (max-width: 640px) {
+        [svgLogo] {
+            display: none;
+        }
+    }
+
 } 
