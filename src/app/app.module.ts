@@ -298,6 +298,7 @@ import { PrestarHcComponent } from './components/prestamosHC/solicitudes/prestar
 import { DevolverHcComponent } from './components/prestamosHC/prestamos/devolver-hc.component';
 import { ImprimirSolicitudesComponent } from './components/prestamosHC/solicitudes/imprimir-solicitudes.component';
 import { SolicitudManualComponent } from './components/prestamosHC/solicitudes/solicitud-manual-hc.component';
+import { HelpSolicitudComponent } from './modules/rup/components/ejecucion/help-solicitud.component';
 
 
 import { EstadisticaModule } from './modules/estadisticas/estadistica.module';
@@ -455,6 +456,7 @@ registerLocaleData(localeEs, 'es');
         VistaDetalleRegistroComponent,
         VistaAccesosHudsComponent,
         ModalMotivoAccesoHudsComponent,
+        HelpSolicitudComponent,
 
         // Solicitudes
         SolicitudesComponent,
