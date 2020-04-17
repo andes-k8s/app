@@ -86,6 +86,7 @@ export class EgresarPacienteComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     private subscription2: Subscription;
     private subscription3: Subscription;
+    private subscription4: Subscription;
 
     constructor(
         public auth: Auth,
@@ -106,6 +107,9 @@ export class EgresarPacienteComponent implements OnInit, OnDestroy {
         }
         if (this.subscription3) {
             this.subscription3.unsubscribe();
+        }
+        if (this.subscription4) {
+            this.subscription4.unsubscribe();
         }
     }
 
@@ -132,22 +136,38 @@ export class EgresarPacienteComponent implements OnInit, OnDestroy {
                     fecha = this.registro.valor.InformeEgreso.fechaEgreso;
                     this.registro.valor.InformeEgreso.fechaEgreso = this.registro.valor.InformeEgreso.fechaEgreso;
                     this.fechaEgresoOriginal = this.registro.valor.InformeEgreso.fechaEgreso;
-                }
-
-
-                if (this.view === 'listado-internacion') {
-                    this.subscription2 = this.mapaCamasService.snapshot(moment(this.registro.valor.InformeEgreso.fechaEgreso).add(-1, 's').toDate(),
-                        this.prestacion.id).subscribe((snapshot) => {
-                            this.cama = snapshot[0];
-                            if (this.cama) {
-                                this.fechaMin = moment(this.cama.fecha, 'DD-MM-YYYY HH:mm').toDate();
-                                this.fecha = fecha;
-                                this.setFecha();
-                            }
-                            this.subscription3 = this.mapaCamasService.getRelacionesPosibles(this.cama).subscribe((relacionesPosibles) => {
-                                this.estadoDestino = relacionesPosibles[0].destino;
+                    if (this.view === 'listado-internacion') {
+                        this.subscription2 = this.mapaCamasService.snapshot(moment(fecha).add(-1, 'minutes').toDate(),
+                            this.prestacion.id).subscribe((snapshot) => {
+                                this.cama = snapshot[0];
+                                if (this.cama) {
+                                    this.fechaMin = moment(this.cama.fecha, 'DD-MM-YYYY HH:mm').toDate();
+                                    this.fecha = fecha;
+                                    this.setFecha();
+                                    this.subscription3 = this.mapaCamasService.getRelacionesPosibles(this.cama).subscribe((relacionesPosibles) => {
+                                        this.estadoDestino = relacionesPosibles[0].destino;
+                                    });
+                                }
                             });
-                        });
+                    }
+                } else if (this.view === 'listado-internacion') {
+                    this.subscription4 = this.mapaCamasService.historial('internacion', this.informeIngreso.fechaIngreso,
+                    moment().toDate()).subscribe((historial) => {
+                        const historialOrden = historial.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+                        fecha = historialOrden[0].fecha;
+                        this.subscription2 = this.mapaCamasService.snapshot(fecha,
+                            this.prestacion.id).subscribe((snapshot) => {
+                                this.cama = snapshot[0];
+                                if (this.cama) {
+                                    this.fechaMin = moment(this.cama.fecha, 'DD-MM-YYYY HH:mm').toDate();
+                                    this.fecha = fecha;
+                                    this.setFecha();
+                                    this.subscription3 = this.mapaCamasService.getRelacionesPosibles(this.cama).subscribe((relacionesPosibles) => {
+                                        this.estadoDestino = relacionesPosibles[0].destino;
+                                    });
+                                }
+                            });
+                    });
                 }
             }
             if (cama.idCama) {
