@@ -8,6 +8,7 @@ import { MapaCamasService } from '../../services/mapa-camas.service';
 import { IPrestacion } from '../../../../../modules/rup/interfaces/prestacion.interface';
 import { Observable, Subscription } from 'rxjs';
 import { ListadoInternacionService } from './listado-internacion.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-internacion-listado',
@@ -28,6 +29,8 @@ export class InternacionListadoComponent implements OnInit {
     public puedeRomper = false;
 
     constructor(
+        public auth: Auth,
+        private router: Router,
         private plex: Plex,
         private location: Location,
         private prestacionService: PrestacionesService,
@@ -36,6 +39,10 @@ export class InternacionListadoComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        if (!this.auth.check('internacion:rol:estadistica') || this.auth.check('internacion:rol:*')) {
+            this.router.navigate(['/inicio']);
+        }
+
         this.mapaCamasService.setView('listado-internacion');
         this.mapaCamasService.setCapa('estadistica');
         this.mapaCamasService.setAmbito('internacion');

@@ -55,6 +55,10 @@ export class CensosMensualesComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        if (this.auth.check('internacion:censo') || !this.auth.check('internacion:rol:estadistica') || this.auth.check('internacion:rol:*')) {
+            this.router.navigate(['/inicio']);
+        }
+
         this.organizacionService.getById(this.auth.organizacion.id).subscribe(organizacion => {
             this.organizacion = organizacion;
             let index;
