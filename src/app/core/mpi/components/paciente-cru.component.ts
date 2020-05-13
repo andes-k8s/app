@@ -210,6 +210,8 @@ export class PacienteCruComponent implements OnInit {
         if (this.paciente) {
 
             if (this.paciente.id) {
+                /* El paciente se agrega al historial de búsqueda sólo si ya existía */
+                this.historialBusquedaService.add(this.paciente);
                 // Busco el paciente en mongodb
                 this.pacienteService.getById(this.paciente.id).subscribe(resultado => {
 
@@ -595,10 +597,7 @@ export class PacienteCruComponent implements OnInit {
                         if (this.changeRelaciones) {
                             this.saveRelaciones(resultadoSave);
                         }
-                        if (this.escaneado) {
-                            // Si el paciente fue escaneado se agrega al historial de búsqueda
-                            this.historialBusquedaService.add(resultadoSave);
-                        }
+                        this.historialBusquedaService.add(resultadoSave);
                         this.plex.info('success', 'Los datos se actualizaron correctamente');
 
                         this.redirect(resultadoSave);
@@ -709,11 +708,6 @@ export class PacienteCruComponent implements OnInit {
     }
 
     cancel() {
-        if (this.escaneado && this.paciente.id) {
-            /* El paciente escaneado se agrega al historial de búsqueda sólo si ya existía.
-            De lo contrario se estaría agregando un paciente que no se terminó de registrar. */
-            this.historialBusquedaService.add(this.paciente);
-        }
         this.showMobile = false;
         this.redirect();
     }
