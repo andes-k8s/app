@@ -12,11 +12,12 @@ export class PlantillasService {
 
     private url = '/modules/rup/plantillas';  // URL to web api
     private cache = {};
+    private cacheSolictud = {};
     // savedText: any;
     constructor(private server: Server, public auth: Auth, public cos: ConceptObserverService) { }
 
-    get(conceptId, force = false): Observable<any> {
-
+    get(conceptId: string, esSolicitud: boolean, force = false): Observable<any> {
+        // [TODO] si es solicitud devolver o rellenar el cache solicitud
         if (!this.cache[conceptId]) {
             this.cache[conceptId] = new BehaviorSubject(null);
         }
@@ -30,9 +31,12 @@ export class PlantillasService {
             };
             return this.server.get(this.url, { params }).pipe(map(plantillas => {
                 if (plantillas.length > 0) {
-                    plantillas = [...plantillas,
-                    { title: 'Limpiar', handler: this.limpiarTextoPlantilla(conceptId), descripcion: '' }];
-                    this.cache[conceptId].next(plantillas.map(p => {
+                    plantillas = [
+                        ...plantillas,
+                        { title: 'Limpiar', handler: this.limpiarTextoPlantilla(conceptId), descripcion: '' }
+                    ];
+                    const _cache = esSolicitud ? this.cacheSolictud[conceptId] : this.cache[conceptId];
+                    _cache.next(plantillas.map(p => {
                         return {
                             ...p,
                             label: p.title,
@@ -68,11 +72,18 @@ export class PlantillasService {
     }
 
 
-    plantillas(conceptId) {
-        if (!this.cache[conceptId]) {
-            this.cache[conceptId] = new BehaviorSubject(null);
+    plantillas(conceptId: string, esSolicitud: boolean) {
+        if (esSolicitud) {
+            if (!this.cacheSolictud[conceptId]) {
+                this.cacheSolictud[conceptId] = new BehaviorSubject(null);
+            }
+            return this.cacheSolictud[conceptId];
+        } else {
+            if (!this.cache[conceptId]) {
+                this.cache[conceptId] = new BehaviorSubject(null);
+            }
+            return this.cache[conceptId];
         }
-        return this.cache[conceptId];
     }
 
     limpiarTextoPlantilla(conceptId) {
