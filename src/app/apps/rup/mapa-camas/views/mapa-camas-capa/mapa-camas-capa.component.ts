@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Auth } from '@andes/auth';
 import { Plex } from '@andes/plex';
@@ -10,6 +10,7 @@ import { IMaquinaEstados } from '../../interfaces/IMaquinaEstados';
 import { take, pluck, tap, map, distinctUntilChanged } from 'rxjs/operators';
 import { IPaciente } from '../../../../../core/mpi/interfaces/IPaciente';
 import { timer, Subscription } from 'rxjs';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
     selector: 'app-mapa-camas-capa',
@@ -19,6 +20,9 @@ import { timer, Subscription } from 'rxjs';
 })
 
 export class MapaCamasCapaComponent implements OnInit, OnDestroy {
+    @ViewChild(CdkVirtualScrollViewport, {static: false})
+    public viewPort: CdkVirtualScrollViewport;
+
     capa$: Observable<string>;
     selectedCama$: Observable<ISnapshot>;
     selectedPaciente$: Observable<IPaciente>;
@@ -34,8 +38,6 @@ export class MapaCamasCapaComponent implements OnInit, OnDestroy {
     ];
     estadoRelacion: any;
     estadosCama: any;
-    estados: any;
-    relaciones: any;
     maquinaEstados: IMaquinaEstados;
     opcionesCamas = [];
     accion = null;
@@ -49,6 +51,13 @@ export class MapaCamasCapaComponent implements OnInit, OnDestroy {
     public permisoIngreso = false;
     public permisoCenso = false;
     public permisoCrearCama = false;
+    public get inverseOfTranslation(): string {
+        if (!this.viewPort || !this.viewPort['_renderedContentOffset']) {
+          return '-0px';
+        }
+        let offset = this.viewPort['_renderedContentOffset'];
+        return `-${offset}px`;
+      }
 
     constructor(
         public auth: Auth,
@@ -73,7 +82,6 @@ export class MapaCamasCapaComponent implements OnInit, OnDestroy {
         }, {
             name: 'Mapa de Camas'
         }]);
-
 
         // CROTADA: si uso ngIf en el layout se rompen los tooltips
         // tengo que averiguar

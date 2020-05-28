@@ -23,21 +23,29 @@
 
         </header>
         <fieldset [hidden]="mainView !== 'mapa-camas'">
-            <table class="table table-striped table-hover">
-                <tr>
-                    <th>CAMA</th>
-                    <th>PACIENTE</th>
-                    <th>UNIDAD ORGANIZATIVA</th>
-                    <th>ESTADO</th>
-                    <th>ACCIONES</th>
-                </tr>
-                <ng-container *ngIf="(selectedCama$ | async) as selectedCama">
-                    <tr app-item-cama *ngFor="let cama of camas | async" [cama]="cama" [capa]="capa"
-                        [permisoIngreso]="permisoIngreso" (accionCama)="selectCama(cama, $event)"
-                        (click)="verDetalle(cama, selectedCama)" [class.invert]="cama._id === selectedCama._id">
-                    </tr>
-                </ng-container>
-            </table>
+            <cdk-virtual-scroll-viewport  #scrollViewport [itemSize]="65.56">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th [style.top]="inverseOfTranslation">CAMA</th>
+                            <th [style.top]="inverseOfTranslation">PACIENTE</th>
+                            <th [style.top]="inverseOfTranslation">UNIDAD ORGANIZATIVA</th>
+                            <th [style.top]="inverseOfTranslation">ESTADO</th>
+                            <th [style.top]="inverseOfTranslation">ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="(selectedCama$ | async) as selectedCama">
+                            <tr app-item-cama *cdkVirtualFor="let cama of camas | async" [cama]="cama" [capa]="capa" 
+                                [estadoCama]="mapaCamasService.getEstadoCama(cama) | async"
+                                [relacionesPosibles]="mapaCamasService.getRelacionesPosibles(cama) | async"
+                                [permisoIngreso]="permisoIngreso" (accionCama)="selectCama(cama, $event)"
+                                (click)="verDetalle(cama, selectedCama)" [class.invert]="cama._id === selectedCama._id">
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </cdk-virtual-scroll-viewport>
         </fieldset>
         <ng-container *ngIf="mainView !== 'mapa-camas'">
             <vista-prestacion [idPrestacion]="mainView.id">
