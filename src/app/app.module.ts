@@ -76,6 +76,7 @@ import { BarrioService } from './services/barrio.service';
 import { LocalidadService } from './services/localidad.service';
 import { PaisService } from './services/pais.service';
 import { PacienteService } from './core/mpi/services/paciente.service';
+import { AuditoriaService } from './components/auditoria/auditoria.service';
 import { TipoEstablecimientoService } from './services/tipoEstablecimiento.service';
 import { ProvinciaService } from './services/provincia.service';
 import { FinanciadorService } from './services/financiador.service';
@@ -550,6 +551,7 @@ registerLocaleData(localeEs, 'es');
         LocalidadService,
         BarrioService,
         PacienteService,
+        AuditoriaService,
         FinanciadorService,
         ParentescoService,
         appRoutingProviders,
