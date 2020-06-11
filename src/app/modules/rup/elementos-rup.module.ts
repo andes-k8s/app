@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '@andes/shared';
 import { ChartsModule } from 'ng2-charts';
 import { NgDragDropModule } from 'ng-drag-drop';
+import { RUPTextModalModule } from './components/core/text-fullscreen/text-modal.module';
 
 
 import { SelectPorRefsetComponent } from './components/elementos/SelectPorRefset.component';
@@ -165,7 +166,8 @@ const RUPComponentsArray = [
         SharedModule,
         ChartsModule,
         NgDragDropModule,
-        MPILibModule
+        MPILibModule,
+        RUPTextModalModule
     ],
     declarations: [
         ...RUPComponentsArray,
@@ -173,6 +175,7 @@ const RUPComponentsArray = [
         ModalSeleccionEmailComponent,
         VistaPrestacionComponent,
         RelacionRUPPipe
+
     ],
     entryComponents: [
         ...RUPComponentsArray
