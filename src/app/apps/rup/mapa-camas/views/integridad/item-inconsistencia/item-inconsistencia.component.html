@@ -1,0 +1,26 @@
+<ng-container *ngIf="inconsistencia">
+    <td>
+        <span class="d-block">
+            <strong>{{ inconsistencia.source.nombre }}</strong>
+        </span>
+        <span class="d-block">
+            {{ inconsistencia.source.sectores[inconsistencia.source.sectores.length - 1].nombre }}
+        </span>
+    </td>
+    <td>
+        <span class="d-block">
+            {{ inconsistencia.source.estado }}
+        </span>
+        <span class="d-block">
+            {{ inconsistencia.source.fecha | fecha }}
+        </span>
+    </td>
+    <td>
+        <span class="d-block">
+            {{ inconsistencia.target.estado }}
+        </span>
+        <span class="d-block">
+            {{ inconsistencia.target.fecha | fecha }}
+        </span>
+    </td>
+</ng-container>

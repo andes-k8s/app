@@ -44,6 +44,8 @@ import { ListadoInternacionService } from './views/listado-internacion/listado-i
 import { RegistrosHudsDetalleComponent } from './sidebar/registros-huds-detalle/registros-huds-detalle.component';
 import { ElementosRUPModule } from '../../../modules/rup/elementos-rup.module';
 import { RegistroHUDSItemComponent } from './sidebar/registros-huds-detalle/registros-huds-item/registros-huds-item.component';
+import { IntegridadCamasComponent } from './views/integridad/integridad-camas.component';
+import { ItemInconsistenciaComponent } from './views/integridad/item-inconsistencia/item-inconsistencia.component';
 
 export const INTERNACION_COMPONENTS = [
     MapaCamasMainComponent,
@@ -72,7 +74,9 @@ export const INTERNACION_COMPONENTS = [
     FiltrosInternacionComponent,
     NuevoRegistroSaludComponent,
     RegistrosHudsDetalleComponent,
-    RegistroHUDSItemComponent
+    RegistroHUDSItemComponent,
+    IntegridadCamasComponent,
+    ItemInconsistenciaComponent,
 ];
 
 export const INTERNACION_PROVIDERS = [

@@ -90,4 +90,8 @@ export class MapaCamasHTTP {
             showError: true
         });
     }
+
+    listaInconsistencias(ambito: string, capa: string, cama = null, desde = null, hasta = null): Observable<any[]> {
+        return this.server.get(`${this.url}/integrity-check-camas`, { params: { ambito, capa, cama, desde, hasta } });
+    }
 }
