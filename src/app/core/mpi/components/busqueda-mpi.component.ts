@@ -17,6 +17,9 @@ export class BusquedaMpiComponent implements OnInit {
     searchClear = true;    // True si el campo de búsqueda se encuentra vacío
     historialSeleccionados: IPaciente[] = [];
     escaneado: boolean;
+    sidebar = 8;
+    paciente: IPaciente = null;
+    showDetallePaciente = false;
 
     constructor(
         private historialBusquedaService: HistorialBusquedaService,
@@ -72,15 +75,29 @@ export class BusquedaMpiComponent implements OnInit {
         this.resultadoBusqueda = [];
     }
 
+    onScroll() {
+
+    }
+
     // ------------- SOBRE LISTA RESULTADO --------------
 
-    onPacienteSelected(paciente: IPaciente) {
+    toEdit(paciente: IPaciente) {
         if (paciente) {
             this.historialBusquedaService.add(paciente);
             this.pacienteCache.setPaciente(paciente);
             this.pacienteCache.setScanState(this.escaneado);
             this.router.navigate(['apps/mpi/paciente']);  // abre paciente-cru
         }
+    }
+
+    toVisualize(paciente: IPaciente) {
+        this.paciente = paciente ? paciente : null;
+        this.showDetallePaciente = (this.paciente != null);
+    }
+
+    closeDetallePaciente() {
+        this.showDetallePaciente = false;
+        this.paciente = null;
     }
 
     // --------------------------------------------------

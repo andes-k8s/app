@@ -1,4 +1,4 @@
-<plex-detail size="lg" direction="{{ orientacion === 'vertical' ? 'column' : 'row' }}">
+<!-- <plex-detail size="lg" direction="{{ orientacion === 'vertical' ? 'column' : 'row' }}">
 
     <img [mpiFotoPaciente]="paciente" />
 
@@ -36,4 +36,66 @@
     <plex-label *ngIf="showTelefono" titulo="Teléfono" [subtitulo]="contacto"></plex-label>
 
     <ng-content select="plex-label" ngProjectAs="plex-label"></ng-content>
-</plex-detail>
+</plex-detail> -->
+
+<ng-container>
+    <plex-detail direction="{{ orientacion === 'vertical' ? 'column' : 'row' }}" size="md"
+                 class="{{ orientacion === 'vertical' ? 'justify-content-center' : 'justify-content-start' }}">
+        <img [mpiFotoPaciente]="paciente" />
+
+        <plex-badge size="xs" class="" type=""
+                    [ngClass]="{'text-success' : paciente.estado === 'validado' , 'text-warning' : paciente.estado === 'temporal'} ">
+            {{ paciente.estado }}</plex-badge>
+
+        <plex-badge *ngIf="paciente.fechaFallecimiento" type="danger">Fallecido:
+            {{ paciente.fechaFallecimiento | fecha:'utc'}}
+        </plex-badge>
+
+        <div title>{{ paciente | nombre }}</div>
+
+        <div subtitle>
+            <plex-copy *ngIf="paciente.documento" [value]="paciente.documento">
+                {{ paciente.documento | number  }}
+            </plex-copy>
+        </div>
+
+        <plex-label *ngIf="showSexo" titulo="Sexo / Género" subtitulo="{{paciente | sexo}}"></plex-label>
+
+        <plex-label *ngIf="showFechaNacimiento" titulo="Fecha de Nacimiento"
+                    subtitulo="{{ (paciente.fechaNacimiento | fecha:'utc') || 'Desconocida' }}"></plex-label>
+
+        <plex-label *ngIf="showEdad" titulo="Edad" subtitulo="{{ (paciente | edad) || 'Desconocida' }}"></plex-label>
+
+        <plex-label *ngIf="showCuil" titulo="CUIL" subtitulo="{{ paciente.cuil || 'Sin cuil' }}"></plex-label>
+
+        <plex-label *ngIf="showFinanciador" [titulo]="financiadorLabel"
+                    subtitulo="{{ obraSocial?.financiador || 'Sin obra social' }}"></plex-label>
+
+        <plex-label *ngIf="showNumeroAfiliado && numeroAfiliado" titulo="Número de Afiliado"
+                    [subtitulo]="numeroAfiliado">
+        </plex-label>
+
+        <plex-label *ngIf="showDireccion" titulo="Dirección" [subtitulo]="direccion"></plex-label>
+
+        <plex-label *ngIf="showTelefono" titulo="Teléfono" [subtitulo]="contacto"></plex-label>
+    </plex-detail>
+</ng-container>
+
+<!-- Propuesta para mostrar otros datos preliminares -->
+<ng-container *ngIf="showRelaciones">
+    <plex-title titulo="Relaciones" size="sm"></plex-title>
+    <plex-list>
+        <plex-label *ngIf="!relaciones?.length" titulo="No hay ninguna relación registrada" subtitulo=""></plex-label>
+
+        <plex-item *ngFor="let relacionado of relaciones" class="">
+            <img [mpiFotoPaciente]="relacionado" />
+
+            <plex-label titulo="{{ relacionado | nombre }}" subtitulo="{{ relacionado.documento | number}}">
+            </plex-label>
+
+            <plex-badge type="info">{{ relacionado.parentesco }}
+            </plex-badge>
+
+        </plex-item>
+    </plex-list>
+</ng-container>

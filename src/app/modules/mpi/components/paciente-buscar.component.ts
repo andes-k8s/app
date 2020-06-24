@@ -32,10 +32,15 @@ export class PacienteBuscarComponent implements OnInit, OnDestroy {
     get disabled() {
         return !this.textoLibre || this.textoLibre.length === 0;
     }
+    // para scroll
+    private parametros;
+    private scrollEnd = false;
+    private busquedaAnterior: IPaciente[] = [];
 
     @Input() hostComponent = '';
     @Input() create = false;
     @Input() returnScannedPatient = false;  // Indica si queremos retornar el objeto del paciente escaneado
+    @Input() scrolling = false;
 
     // Eventos
     @Output() searchStart: EventEmitter<any> = new EventEmitter<any>();
@@ -51,6 +56,10 @@ export class PacienteBuscarComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.autoFocus = this.autoFocus + 1;
+        this.parametros = {
+            skip: 0,
+            limit: 10
+        };
         this.routes = [
             { label: 'BEBÉ', route: `${this.pacienteRoute}/bebe/${this.hostComponent}` },
             { label: 'EXTRANJERO', route: `${this.pacienteRoute}/extranjero/${this.hostComponent}` },
@@ -62,7 +71,6 @@ export class PacienteBuscarComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         clearInterval(this.timeoutHandle);
     }
-
 
     /**
      * Controla si se ingresó el caracter " en la primera parte del string, indicando que el scanner no está bien configurado
@@ -84,6 +92,55 @@ export class PacienteBuscarComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Recibe el último resultado emitido y le realiza una nueva búsqueda por texto
+     * retornando ambos resultados concatenados
+     */
+    public onScroll(ultimoResultado: IPaciente[]) {
+        if (!this.scrollEnd) {
+            this.busquedaAnterior = ultimoResultado;
+            this.buscarPorTexto();
+        }
+    }
+
+    private buscarPorTexto() {
+        let textoLibre = this.textoLibre && this.textoLibre.trim();
+
+        if (this.searchSubscription) {
+            this.searchSubscription.unsubscribe();
+        }
+
+        if (this.scrolling) {
+            this.searchSubscription = this.pacienteHttp.match({
+                type: 'multimatch',
+                cadenaInput: textoLibre,
+                limit: this.parametros.limit,
+                skip: this.parametros.skip
+            }).subscribe(resultado => {
+
+                resultado = this.busquedaAnterior.concat(resultado);
+                this.parametros.skip = resultado.length;
+
+                // si vienen menos pacientes que {{ limit }} significa que ya se cargaron todos
+                if (!resultado.length || resultado.length < this.parametros.limit) {
+                    this.scrollEnd = true;
+                }
+                this.searchEnd.emit({ pacientes: resultado, err: null });
+            },
+                (err) => this.searchEnd.emit({ pacientes: [], err: err })
+            );
+        } else {
+            this.searchSubscription = this.pacienteHttp.match({
+                type: 'multimatch',
+                cadenaInput: textoLibre
+            }).subscribe(resultado => {
+                this.searchEnd.emit({ pacientes: resultado, err: null });
+            },
+                (err) => this.searchEnd.emit({ pacientes: [], err: err })
+            );
+        }
+    }
+
+    /**
      * Busca paciente cada vez que el campo de busqueda cambia su valor
      */
     public buscar($event) {
@@ -95,6 +152,10 @@ export class PacienteBuscarComponent implements OnInit, OnDestroy {
         if (this.timeoutHandle) {
             window.clearTimeout(this.timeoutHandle);
         }
+        // reiniciamos variables utilizadas por infinity-scroll
+        this.parametros.skip = 0;
+        this.scrollEnd = false;
+        this.busquedaAnterior = [];
 
         // Controla el scanner
         if (!this.controlarScanner()) {
@@ -126,18 +187,7 @@ export class PacienteBuscarComponent implements OnInit, OnDestroy {
                     });
                 } else {
                     // 2. Busca por texto libre
-                    if (this.searchSubscription) {
-                        this.searchSubscription.unsubscribe();
-                    }
-                    this.searchSubscription = this.pacienteHttp.match({
-                        type: 'multimatch',
-                        cadenaInput: textoLibre
-                    }).subscribe(
-                        resultado => {
-                            this.searchEnd.emit({ pacientes: resultado, err: null });
-                        },
-                        (err) => this.searchEnd.emit({ pacientes: [], err: err })
-                    );
+                    this.buscarPorTexto();
                 }
             }, 500);
         } else {
