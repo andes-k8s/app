@@ -27,7 +27,8 @@
         <div *ngIf="permisoDescarga" class="col-1">
             <label>&nbsp;</label>
             <plex-button type="warning" icon="download mdi-14px" title="Descargar Csv" titlePosition="top"
-                         (click)="reporteInternaciones()" [disabled]="listadoInternacion && !listadoInternacion.length">
+                         (click)="reporteInternaciones()"
+                         [disabled]="listadoInternacion && !listadoInternacion.length && requestInProgress">
             </plex-button>
         </div>
     </div>
