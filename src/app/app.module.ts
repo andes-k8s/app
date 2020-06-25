@@ -364,6 +364,7 @@ import { ModulosService } from './services/novedades/modulos.service';
 
 import { ConceptosTurneablesService } from './services/conceptos-turneables.service';
 import { DisclaimerService } from './services/disclaimer.service';
+import { MapaCamasHTTP } from './apps/rup/mapa-camas/services/mapa-camas.http';
 
 registerLocaleData(localeEs, 'es');
 
@@ -606,7 +607,8 @@ registerLocaleData(localeEs, 'es');
         ConceptosTurneablesService,
         DisclaimerService,
         InstitucionService,
-        CommonNovedadesService
+        CommonNovedadesService,
+        MapaCamasHTTP
     ]
 })
 
